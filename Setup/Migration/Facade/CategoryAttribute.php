@@ -4,20 +4,21 @@
 namespace Discorgento\Migrations\Setup\Migration\Facade;
 
 use Discorgento\Migrations\Common\EavAttribute;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 
 class CategoryAttribute extends EavAttribute
 {
     public const ENTITY_TYPE = CategoryAttributeInterface::ENTITY_TYPE_CODE;
 
-    protected ReposAndCollections $reposAndCollections;
+    private CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(
         EavAttribute\Context $context,
-        ReposAndCollections $reposAndCollections
+        CategoryRepositoryInterface $categoryRepository
     ) {
         parent::__construct($context);
-        $this->reposAndCollections = $reposAndCollections;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -26,11 +27,12 @@ class CategoryAttribute extends EavAttribute
      */
     public function massUpdate($entityIds, $data)
     {
-        $categoryRepository = $this->reposAndCollections->getCategoryRepository();
         foreach ($entityIds as $categoryId) {
-            $category = $categoryRepository->get($categoryId);
+            /** @var \Magento\Catalog\Model\Category */
+            $category = $this->categoryRepository->get($categoryId);
             $category->addData($data);
-            $categoryRepository->save($category);
+
+            $this->categoryRepository->save($category);
         }
     }
 }

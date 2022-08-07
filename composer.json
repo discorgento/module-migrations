@@ -2,8 +2,9 @@
     "name": "discorgento/module-migrations",
     "description": "A dev-friendly approach to quickly create migrations (patch data) on Magento 2",
     "type": "magento2-module",
+    "license": "MIT",
     "require": {
-        "php": ">=7.2.0 <8.2"
+        "php": ">=7.3.0 <8.2"
     },
     "autoload": {
         "files": [
