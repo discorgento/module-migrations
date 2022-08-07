@@ -1,18 +1,19 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin;
+namespace Discorgento\Migrations\Setup\Migration\Facade;
 
+use Discorgento\Migrations\Common\EavAttribute;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 
-class CategoryAttribute extends Common\EavAttribute
+class CategoryAttribute extends EavAttribute
 {
     public const ENTITY_TYPE = CategoryAttributeInterface::ENTITY_TYPE_CODE;
 
     protected ReposAndCollections $reposAndCollections;
 
     public function __construct(
-        Common\EavAttribute\Context $context,
+        EavAttribute\Context $context,
         ReposAndCollections $reposAndCollections
     ) {
         parent::__construct($context);

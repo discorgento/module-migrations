@@ -1,14 +1,15 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin;
+namespace Discorgento\Migrations\Setup\Migration\Facade;
 
+use Discorgento\Migrations\Common\EavAttribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Eav\Model\AttributeManagement;
 use Magento\Eav\Model\AttributeSetRepository;
 
-class ProductAttribute extends Common\EavAttribute
+class ProductAttribute extends EavAttribute
 {
     public const ENTITY_TYPE = ProductAttributeInterface::ENTITY_TYPE_CODE;
 
@@ -17,7 +18,7 @@ class ProductAttribute extends Common\EavAttribute
     protected AttributeSetRepository $attributeSetRepository;
 
     public function __construct(
-        Common\EavAttribute\Context $context,
+        EavAttribute\Context $context,
         ProductAction $productAction,
         AttributeManagement $attributeManagement,
         AttributeSetRepository $attributeSetRepository

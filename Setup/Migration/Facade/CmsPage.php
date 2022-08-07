@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin;
+namespace Discorgento\Migrations\Setup\Migration\Facade;
 
+use Discorgento\Migrations\Common\Cms;
 use Magento\Cms\Model\PageFactory;
 use Magento\Cms\Model\PageRepository;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 
-class CmsPage extends Common\Cms
+class CmsPage extends Cms
 {
     public function __construct(
         PageCollectionFactory $collectionFactory,

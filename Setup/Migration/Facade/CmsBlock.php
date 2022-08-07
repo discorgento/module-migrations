@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin;
+namespace Discorgento\Migrations\Setup\Migration\Facade;
 
+use Discorgento\Migrations\Common\Cms;
 use Magento\Cms\Model\BlockFactory;
 use Magento\Cms\Model\BlockRepository;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 
-class CmsBlock extends Common\Cms
+class CmsBlock extends Cms
 {
     public function __construct(
         BlockCollectionFactory $collectionFactory,

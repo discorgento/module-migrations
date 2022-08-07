@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin\Common\EavAttribute;
+namespace Discorgento\Migrations\Common\EavAttribute;
 
 use Magento\Eav\Setup\EavSetupFactory;
 
