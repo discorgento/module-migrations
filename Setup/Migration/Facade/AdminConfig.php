@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin;
+namespace Discorgento\Migrations\Setup\Migration\Facade;
 
 use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
 use Magento\Framework\App\Config\Storage\WriterInterface as ConfigWriter;

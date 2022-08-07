@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin\Common;
+namespace Discorgento\Migrations\Common;
 
 use Magento\Cms\Model\BlockFactory;
 use Magento\Cms\Model\BlockRepository;

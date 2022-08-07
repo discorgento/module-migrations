@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /** Copyright © Discorgento. All rights reserved. */
 
-namespace Discorgento\Migrations\Setup\Migration\Plugin;
+namespace Discorgento\Migrations\Setup\Migration\Facade;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface as CategoryRepository;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
