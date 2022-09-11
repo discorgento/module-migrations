@@ -3,17 +3,15 @@
 
 namespace Discorgento\Migrations\Setup;
 
-use Discorgento\Migrations\Api\Data\StateInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
 abstract class Migration implements
     DataPatchInterface,
-    PatchRevertableInterface,
-    StateInterface
+    PatchRevertableInterface
 {
-    protected const AREA_CODE = self::AREA_CODE_GLOBAL;
+    protected const AREA_CODE = null;
 
     private Migration\Context $context;
 
@@ -41,7 +39,14 @@ abstract class Migration implements
     {
         $this->getConnection()->startSetup();
 
-        $this->context->state->setAreaCode(static::AREA_CODE);
+        if ($areaCode = static::AREA_CODE) {
+            try {
+                $this->context->state->setAreaCode($areaCode);
+            } catch (\Throwable $th) {
+                // already set
+            }
+        }
+
         $this->execute();
 
         $this->getConnection()->endSetup();

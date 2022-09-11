@@ -35,13 +35,17 @@ abstract class Cms
     /**
      * Create a new content on database through corresponding cms repository
      *
+     * @param string $identifier
      * @param array $data
+     * @param int|null $storeId
      * @return Block|Page
      */
-    public function create($data)
+    public function create($identifier, $data, $storeId = null)
     {
-        $model = $this->factory->create();
-        $model->addData($data);
+        $model = $this->factory->create()
+            ->setIdentifier($identifier)
+            ->addData($data)
+            ->setStoreId($storeId);
 
         return $this->repository->save($model);
     }
