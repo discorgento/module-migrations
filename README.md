@@ -148,6 +148,6 @@ Run a `bin/magento setup:upgrade` and navigate to the _/my-new-page route_, the 
 > 💡 **Tip:** We have facades for the most common tasks we came across so far, **don't forget to check out the [official wiki](https://github.com/discorgento/module-migrations/wiki) to make the most use of this powerful m2 tool ;)**
 
 ## Notes 🗒
- - roadmap: create cli command to generate migrations for existant cms content;
+ - roadmap: create cli command to generate migrations for existant cms content (thanks [@vpjoao98](https://github.com/vpjoao98));
  - issues and PRs are welcome in this repo;
  - we want **YOU** for [our community](https://discord.io/Discorgento)!
