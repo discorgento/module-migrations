@@ -1,6 +1,6 @@
 ![Discorgento Migrations](docs/header.png)
 
-<p align="center">A dev-friendly approach to handle background jobs in Magento 2</p>
+<p align="center">A dev-friendly approach to keep track of database changes in Magento 2</p>
 <p align="center">
     <a href="https://github.com/discorgento/module-migrations/stargazers" target="_blank"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/discorgento/module-migrations?style=social"/></a>
     <a href="https://packagist.org/packages/discorgento/module-migrations/stats" target="_blank"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/discorgento/module-migrations"/></a>
@@ -28,4 +28,84 @@ composer require discorgento/module-migrations:^2 && bin/magento setup:upgrade
 ```
 
 ## Usage ⚙️
-@todo
+Let's take a look at the basic structure of a native data patch:
+(let's say, _app/code/YourCompany/YourModule/Setup/Patch/Data/DoSomething.php_)
+```php
+<?php declare(strict_types=1);
+/** Copyright © Your Company. All rights reserved. */
+
+namespace YourCompany\YourModule\Setup\Patch\Data;
+
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchRevertableInterface;
+
+class DoSomething implements DataPatchInterface, PatchRevertableInterface
+{
+    private ModuleDataSetupInterface $moduleDataSetup;
+
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup
+    ) {
+        $this->moduleDataSetup = $moduleDataSetup;
+    }
+
+    /** @inheritdoc */
+    public function apply()
+    {
+        $this->moduleDataSetup->getConnection()->startSetup();
+
+        // do stuff
+
+        $this->moduleDataSetup->getConnection()->endSetup();
+    }
+
+    public function revert()
+    {
+        $this->moduleDataSetup->getConnection()->startSetup();
+
+        // undo stuff (actually nobody cares about this)
+
+        $this->moduleDataSetup->getConnection()->endSetup();
+    }
+
+    /** @inheritdoc */
+    public function getAliases()
+    {
+        return [];
+    }
+
+    /** @inheritdoc */
+    public static function getDependencies()
+    {
+        return [];
+    }
+}
+```
+
+That's just the skeleton of a native data patch. Insane.
+Now using this module, the skeleton is drops to just this:
+
+```php
+<?php declare(strict_types=1);
+/** Copyright © Your Company. All rights reserved. */
+
+namespace YourCompany\YourModule\Setup\Patch\Data;
+
+use Discorgento\Migrations\Setup\Migration;
+
+class DoSomething extends Migration
+{
+    protected function execute()
+    {
+        // do something
+    }
+}
+```
+
+MUCH better.
+
+## Notes 🗒
+ - roadmap: create cli command to generate migrations for existant cms content;
+ - issues and PRs are welcome in this repo;
+ - we want **YOU** for [our community](https://discord.io/Discorgento)!
