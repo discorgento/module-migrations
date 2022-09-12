@@ -127,6 +127,7 @@ class CmsPageFoo extends Migration
         Migration\Context $context,
         Migration\Facade\CmsPage $cmsPage
     ) {
+        parent::__construct($context);
         $this->cmsPage = $cmsPage;
     }
 
