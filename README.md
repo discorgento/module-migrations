@@ -83,8 +83,8 @@ class DoSomething implements DataPatchInterface, PatchRevertableInterface
 }
 ```
 
-That's just the skeleton of a native data patch. Insane.
-Now using this module, the skeleton is drops to just this:
+That's just the skeleton of a native data patch. Insane.  
+Now using this module, the skeleton drops to just this small snippet:
 
 ```php
 <?php declare(strict_types=1);
