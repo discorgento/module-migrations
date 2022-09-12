@@ -107,7 +107,7 @@ From 50 lines to just 15, or simply 70% less code. SEVENTY percent fewer lines.
 But we're just getting started.
 
 ## Facades 🥤
-There's some common stuff when it comes to migrations: changing admin config settings, managing cms content, create product attributes, etc. So for this, we've created some [Facades](https://refactoring.guru/design-patterns/facade) to speed up those.
+There's some common stuff when it comes to migrations: changing admin config settings, managing cms content, create product attributes, etc. So for this, we've created some [Facades](https://refactoring.guru/design-patterns/facade) to speed up the repetitive parts.
 
 For example, if you need to create a cms page, instead of writting [all of this](https://magento.stackexchange.com/questions/127495/how-to-add-a-cms-block-programmatically-in-magento-2), you can simply use our CmsPage facade:
 
