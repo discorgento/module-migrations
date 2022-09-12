@@ -145,7 +145,7 @@ class CmsPageFoo extends Migration
 
 Run a `bin/magento setup:upgrade` and navigate to the _/my-new-page route_, the page will be there. And this will be automatically replicated in your staging/production (and even other dev machines) environments.
 
-We have facades for the most common tasks we came across so far, **don't forget to check out the [official wiki](https://github.com/discorgento/module-migrations/wiki) to make the most use of this simple, yet very powerful m2 tool ;)**
+> 💡 **Tip:** We have facades for the most common tasks we came across so far, **don't forget to check out the [official wiki](https://github.com/discorgento/module-migrations/wiki) to make the most use of this simple, yet very powerful m2 tool ;)**
 
 ## Notes 🗒
  - roadmap: create cli command to generate migrations for existant cms content;
