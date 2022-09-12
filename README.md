@@ -119,7 +119,7 @@ namespace YourCompany\YourModule\Setup\Patch\Data;
 
 use Discorgento\Migrations\Setup\Migration;
 
-class CmsPageFoo extends Migration
+class CmsPageMyNewPage extends Migration
 {
     private Migration\Facade\CmsPage $cmsPage;
 
