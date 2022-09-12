@@ -96,14 +96,55 @@ use Discorgento\Migrations\Setup\Migration;
 
 class DoSomething extends Migration
 {
+    /** @inheritdoc */
     protected function execute()
     {
         // do something
     }
 }
 ```
+From 50 lines to just 15, or simply 70% less code. SEVENTY percent fewer lines.
+But we're just getting started.
 
-MUCH better.
+## Facades 🥤
+There's some common stuff when it comes to migrations: changing admin config settings, managing cms content, create product attributes, etc. So for this, we've created some [Facades](https://refactoring.guru/design-patterns/facade) to speed up those.
+
+For example, if you need to create a cms page, instead of writting [all of this](https://magento.stackexchange.com/questions/127495/how-to-add-a-cms-block-programmatically-in-magento-2), you can simply use our CmsPage facade:
+
+```php
+<?php declare(strict_types=1);
+/** Copyright © Your Company. All rights reserved. */
+
+namespace YourCompany\YourModule\Setup\Patch\Data;
+
+use Discorgento\Migrations\Setup\Migration;
+
+class CmsPageFoo extends Migration
+{
+    private Migration\Facade\CmsPage $cmsPage;
+
+    public function __construct(
+        Migration\Context $context,
+        Migration\Facade\CmsPage $cmsPage
+    ) {
+        $this->cmsPage = $cmsPage;
+    }
+
+    protected function execute()
+    {
+        $this->cmsPage->create('my-new-page', [
+            'title' => 'Lorem Ipsum',
+            'content' => <<<HTML
+                <span>Hello World!</span>
+            HTML,
+        ]);
+    }
+}
+```
+
+Run a `bin/magento setup:upgrade` and navigate to the _/my-new-page route_, the page will be there. And this will be automatically replicated in your staging/production (and even other dev machines) environments.
+
+We have facades to the most common tasks we came across so far, **don't forget to check out the [official wiki](https://github.com/discorgento/module-migrations/wiki) to make the most use of this simple, yet very powerful m2 tool ;)**
 
 ## Notes 🗒
  - roadmap: create cli command to generate migrations for existant cms content;
