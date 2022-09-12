@@ -57,8 +57,23 @@ class AdminConfig
     }
 
     /**
-     * Delete given config from core_config_data
-     * (thus resetting to config.xml value)
+     * Delete given config from core_config_data,
+     * thus restoring it to the default config.xml value.
+     *
+     * @param string|array $path
+     * @param string $scope
+     * @param int $scopeId
+     */
+    public function restore($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)
+    {
+        $paths = is_string($path) ? [$path] : $path;
+        foreach ($paths as $path) {
+            $this->configWriter->delete($path, $scope, $scopeId);
+        }
+    }
+
+    /**
+     * Alias to ->restore() for backwards compatibility purposes
      *
      * @param string|array $path
      * @param string $scope
@@ -66,10 +81,7 @@ class AdminConfig
      */
     public function reset($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
-        $paths = is_string($path) ? [$path] : $path;
-        foreach ($paths as $path) {
-            $this->configWriter->delete($path, $scope, $scopeId);
-        }
+        $this->restore($path, $scope, $scopeId);
     }
 
     /**
