@@ -75,6 +75,7 @@ class AdminConfig
     /**
      * Alias to ->restore() for backwards compatibility purposes
      *
+     * @deprecated 2.0.3
      * @param string|array $path
      * @param string $scope
      * @param int $scopeId
