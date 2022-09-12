@@ -4,6 +4,7 @@
 namespace Discorgento\Migrations\Setup;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
@@ -65,7 +66,7 @@ abstract class Migration implements
      */
     protected function getConnection() : AdapterInterface
     {
-        return $this->context->moduleDataSetup->getConnection();
+        return $this->getModuleDataSetup()->getConnection();
     }
 
     /**
@@ -74,7 +75,16 @@ abstract class Migration implements
      */
     protected function getTableName(string $rawName) : string
     {
-        return $this->context->moduleDataSetup->getTable($rawName);
+        return $this->getModuleDataSetup()->getTable($rawName);
+    }
+
+    /**
+     * Module Setup Data getter
+     * @return ModuleDataSetupInterface
+     */
+    protected function getModuleDataSetup()
+    {
+        return $this->context->moduleDataSetup;
     }
 
     /** @inheritdoc */
