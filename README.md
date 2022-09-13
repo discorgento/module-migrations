@@ -18,7 +18,7 @@ Just changed something on the admin panel or on the database and now you need to
 
 Probably you already heard about data patches, the Magento way of writing database migrations (at least I hope so; you're not redoing those changes manually in each environment, right? Right?). Although as always with Magento things, they are just too ridiculously verbose to write without checking the docs every single time.
 
-But what if I say that it can be really, really simplified?
+But what if I say that it can be really, really simplified?  
 ![FMAB Sloth](docs/such-a-pain.gif)
 
 ## Install 🔧
