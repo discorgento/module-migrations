@@ -27,7 +27,7 @@ This module is compatible with both Magento 2.3 and 2.4, from PHP 7.3 to 8.1.
 composer require discorgento/module-migrations:^2 && bin/magento setup:upgrade
 ```
 
-## Demo 📹
+## Demo 🎥
 @wip
 
 ## Usage ⚙️
