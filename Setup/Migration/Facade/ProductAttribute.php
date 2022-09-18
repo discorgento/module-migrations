@@ -76,6 +76,23 @@ class ProductAttribute extends EavAttribute
         );
     }
 
+    /**
+     * Remove given attribute from given attribute set
+     *
+     * @param string $code
+     * @param int $attributeSetId
+     */
+    public function unassignFromAttributeSet($code, $attributeSetId = null)
+    {
+        $attributeSetId = $attributeSetId ?: $this->getEavSetup()
+            ->getDefaultAttributeSetId(self::ENTITY_TYPE);
+
+        $this->attributeManagement->unassign(
+            $attributeSetId,
+            $code
+        );
+    }
+
     public function massUpdate($entityIds, $data)
     {
         $this->productAction->updateAttributes(
