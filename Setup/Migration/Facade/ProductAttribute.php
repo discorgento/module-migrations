@@ -57,40 +57,40 @@ class ProductAttribute extends EavAttribute
     /**
      * Assign an attribute to some attribute set (or default if none specified)
      *
-     * @param string $code
+     * @param string $attributeCode
      * @param array $options
      */
-    public function assignToAttributeSet($code, $options = [])
+    public function assignToAttributeSet($attributeCode, $options = [])
     {
         $attributeSetId = $options['attribute_set_id'] ??
             $this->getEavSetup()->getDefaultAttributeSetId(self::ENTITY_TYPE);
 
         /** @var \Magento\Eav\Model\Entity\Attribute\Set */
         $attributeSet = $this->attributeSetRepository->get($attributeSetId);
+        $attributeGroupId = $options['group_id'] ?? $attributeSet->getDefaultGroupId();
+        $sortOrder = $options['sort_order'] ?? 999;
+
         $this->attributeManagement->assign(
             self::ENTITY_TYPE,
-            $attributeSet->getId(),
-            $options['group_id'] ?? $attributeSet->getDefaultGroupId(),
-            $code,
-            $options['sort_order'] ?? 99
+            $attributeSetId,
+            $attributeGroupId,
+            $attributeCode,
+            $sortOrder
         );
     }
 
     /**
      * Remove given attribute from given attribute set
      *
-     * @param string $code
+     * @param string $attributeCode
      * @param int $attributeSetId
      */
-    public function unassignFromAttributeSet($code, $attributeSetId = null)
+    public function unassignFromAttributeSet($attributeCode, $attributeSetId = null)
     {
         $attributeSetId = $attributeSetId ?: $this->getEavSetup()
             ->getDefaultAttributeSetId(self::ENTITY_TYPE);
 
-        $this->attributeManagement->unassign(
-            $attributeSetId,
-            $code
-        );
+        $this->attributeManagement->unassign($attributeSetId, $attributeCode);
     }
 
     public function massUpdate($entityIds, $data)
