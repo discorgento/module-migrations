@@ -222,7 +222,7 @@ class ProductAttribute extends EavAttribute
      * @param string|int|AttributeSet $attributeSet
      * @return int
      */
-    public function getSortOrder($attributeCode, $attributeSet = null)
+    private function getSortOrder($attributeCode, $attributeSet = null)
     {
         $entityTypeId = $this->getEntityTypeId();
         $attributeSetId = $this->resolveAttributeSetId($attributeSet);
