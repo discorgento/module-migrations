@@ -65,7 +65,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
      * Retrieve a fresh instance of the EavSetup
      * @return \Magento\Eav\Setup\EavSetup
      */
-    public function getEavSetup()
+    protected function getEavSetup()
     {
         return $this->eavSetupFactory->create();
     }
@@ -73,7 +73,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
     /**
      * Database facade for quick operations
      */
-    public function getConnection()
+    protected function getConnection()
     {
         return $this->resourceConnection->getConnection();
     }
@@ -85,7 +85,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
      * @param string $rawTableName
      * @return string
      */
-    public function getTableName($rawTableName)
+    protected function getTableName($rawTableName)
     {
         return $this->resourceConnection->getTableName($rawTableName);
     }
@@ -94,7 +94,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
      * Retrieve entity type if
      * @return int
      */
-    public function getEntityTypeId()
+    protected function getEntityTypeId()
     {
         $tableName = $this->getTableName('eav_entity_type');
 
