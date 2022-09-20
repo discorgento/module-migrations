@@ -16,7 +16,7 @@
 ## Overview 💭
 Just changed something on the admin panel or on the database and now you need to replicate it again in staging and production? No worries, [we](https://discord.io/Discorgento) got you covered.
 
-Probably you already heard about [data patches](https://developer.adobe.com/commerce/php/development/components/declarative-schema/patches/), the Magento way of writing database migrations (at least I hope so; you're not redoing those changes manually in each environment, right? [Right?](https://i.imgflip.com/4/5c7lwq.jpg)). Although as always with Magento things, they are just too ridiculously verbose to write without checking the docs every single time.
+Probably you already heard about [data patches](https://developer.adobe.com/commerce/php/development/components/declarative-schema/patches/), the Magento way of writing database migrations (at least I hope so; you're not redoing those changes manually in each environment, right? [Right??](https://i.imgflip.com/4/5c7lwq.jpg)). Although as always with Magento things, they are just too ridiculously verbose to write without checking the docs every single time.
 
 But what if I say that it can be really, really simplified?  
 ![FMAB Sloth](docs/such-a-pain.gif)
