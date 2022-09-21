@@ -93,8 +93,8 @@ class ProductAttribute extends EavAttribute
      */
     private function assignToAttributeSetLegacy($attributeCode, $options = [])
     {
-        $attributeSetId = $options['attribute_set_id'] ??
-            $this->getEavSetup()->getDefaultAttributeSetId(self::ENTITY_TYPE);
+        $attributeSetId = intval($options['attribute_set_id'] ??
+            $this->getEavSetup()->getDefaultAttributeSetId(self::ENTITY_TYPE));
 
         $attributeGroupId = $options['group_id'] ?? $this->getDefaultGroupId($attributeSetId);
         $sortOrder = $options['sort_order'] ?? 999;
