@@ -28,7 +28,9 @@ composer require discorgento/module-migrations:^2 && bin/magento setup:upgrade
 ```
 
 ## Demo 🎥
-@wip
+Quick demo/tutorial on how to use it:  
+<a href="https://odysee.com/@discorgento:8/Introduction-to-Module-Migrations-Magento-discorgento-module-migrations:a"><img src="https://user-images.githubusercontent.com/4603111/202745678-d9960d66-4618-4100-aee1-50a4cc728829.png" height="200"/></a>  
+There's also an extended version in Brazillian Portuguese including CMS content management overview available [here](https://odysee.com/@discorgento:8/Introdu%C3%A7%C3%A3o-ao-Modulo-Migrations-Magento-discorgento-module-migrations:9).
 
 ## Usage ⚙️
 Let's take a look at the basic structure of a native data patch:
