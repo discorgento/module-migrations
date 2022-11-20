@@ -16,10 +16,11 @@
 ## Overview 💭
 Just changed something on the admin panel or on the database and now you need to replicate it again in staging and production? No worries, [we](https://discord.io/Discorgento) got you covered.
 
-Probably you already heard about [data patches](https://developer.adobe.com/commerce/php/development/components/declarative-schema/patches/), the Magento way of writing database migrations (at least I hope so; you're not redoing those changes manually in each environment, right? [Right??](https://i.imgflip.com/4/5c7lwq.jpg)). Although as always with Magento things, they are just too ridiculously verbose to write without checking the docs every single time.
+Probably you already heard about [data patches](https://developer.adobe.com/commerce/php/development/components/declarative-schema/patches/), but what if I say that it can be really, really simplified?  
 
-But what if I say that it can be really, really simplified?  
-![FMAB Sloth](docs/such-a-pain.gif)
+![image](https://user-images.githubusercontent.com/4603111/202905621-b9a89732-1812-4929-a9c5-a87a8b02278e.png)
+From 50 lines to just 15, or simply 70% less code. SEVENTY percent fewer lines.
+But we're just getting started.
 
 ## Install 🔧
 This module is compatible with both Magento 2.3 and 2.4, from PHP 7.3 to 8.1.
@@ -32,86 +33,7 @@ Quick demo/tutorial on how to use it:
 <a href="https://odysee.com/@discorgento:8/Introduction-to-Module-Migrations-Magento-discorgento-module-migrations:a"><img src="https://user-images.githubusercontent.com/4603111/202745678-d9960d66-4618-4100-aee1-50a4cc728829.png" height="200"/></a>  
 There's also an extended version in Brazillian Portuguese including CMS content management overview available [here](https://odysee.com/@discorgento:8/Introdu%C3%A7%C3%A3o-ao-Modulo-Migrations-Magento-discorgento-module-migrations:9).
 
-## Usage ⚙️
-Let's take a look at the basic structure of a native data patch:
-(let's say, _app/code/YourCompany/YourModule/Setup/Patch/Data/DoSomething.php_)
-```php
-<?php declare(strict_types=1);
-/** Copyright © Your Company. All rights reserved. */
-
-namespace YourCompany\YourModule\Setup\Patch\Data;
-
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\Patch\PatchRevertableInterface;
-
-class DoSomething implements DataPatchInterface, PatchRevertableInterface
-{
-    private ModuleDataSetupInterface $moduleDataSetup;
-
-    public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
-    ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-    }
-
-    /** @inheritdoc */
-    public function apply()
-    {
-        $this->moduleDataSetup->getConnection()->startSetup();
-
-        // do stuff
-
-        $this->moduleDataSetup->getConnection()->endSetup();
-    }
-
-    public function revert()
-    {
-        $this->moduleDataSetup->getConnection()->startSetup();
-
-        // undo stuff (actually nobody cares about this)
-
-        $this->moduleDataSetup->getConnection()->endSetup();
-    }
-
-    /** @inheritdoc */
-    public function getAliases()
-    {
-        return [];
-    }
-
-    /** @inheritdoc */
-    public static function getDependencies()
-    {
-        return [];
-    }
-}
-```
-
-That's just the skeleton of a native data patch. Insane.  
-Now using this module, the skeleton drops to just this small snippet:
-
-```php
-<?php declare(strict_types=1);
-/** Copyright © Your Company. All rights reserved. */
-
-namespace YourCompany\YourModule\Setup\Patch\Data;
-
-use Discorgento\Migrations\Setup\Migration;
-
-class DoSomething extends Migration
-{
-    /** @inheritdoc */
-    protected function execute()
-    {
-        // do something
-    }
-}
-```
-From 50 lines to just 15, or simply 70% less code. SEVENTY percent fewer lines.
-But we're just getting started.
-
-## Facades 🥤
+## Usage 🥤
 There's some common stuff when it comes to migrations: changing admin config settings, managing cms content, create product attributes, etc. So for this, we've created some [Facades](https://refactoring.guru/design-patterns/facade) to speed up the repetitive parts.
 
 For example, if you need to create a cms page, instead of writting [all of this](https://magento.stackexchange.com/questions/127495/how-to-add-a-cms-block-programmatically-in-magento-2), you can simply use our CmsPage facade:
