@@ -28,12 +28,11 @@ This module is compatible with both Magento 2.3 and 2.4, from PHP 7.3 to 8.1.
 composer require discorgento/module-migrations:^2 && bin/magento setup:upgrade
 ```
 
-## Demo 🎥
-Quick demo/tutorial on how to use it:  
-<a href="https://odysee.com/@discorgento:8/Introduction-to-Module-Migrations-Magento-discorgento-module-migrations:a"><img src="https://user-images.githubusercontent.com/4603111/202745678-d9960d66-4618-4100-aee1-50a4cc728829.png" height="200"/></a>  
-There's also an extended version in Brazillian Portuguese including CMS content management overview available [here](https://odysee.com/@discorgento:8/Introdu%C3%A7%C3%A3o-ao-Modulo-Migrations-Magento-discorgento-module-migrations:9).
-
 ## Usage 🥤
+Quick demo on how to use it:  
+<a href="https://odysee.com/@discorgento:8/Introduction-to-Module-Migrations-Magento-discorgento-module-migrations:a"><img src="https://user-images.githubusercontent.com/4603111/202745678-d9960d66-4618-4100-aee1-50a4cc728829.png" height="200"/></a>  
+> There's also an extended version in Brazillian Portuguese including CMS content management overview available [here](https://odysee.com/@discorgento:8/Introdu%C3%A7%C3%A3o-ao-Modulo-Migrations-Magento-discorgento-module-migrations:9).
+
 Besides simplifying the basic structure like showed before, we also provide some [facades](https://refactoring.guru/design-patterns/facade) to common tasks like handling [admin config](https://github.com/discorgento/module-migrations/wiki/Admin-Config), [product attributes](https://github.com/discorgento/module-migrations/wiki/Product-Attributes), [cms content](https://github.com/discorgento/module-migrations/wiki/Cms-Content) and [more](https://github.com/discorgento/module-migrations/wiki). As an example, you can use a snippet like this to create a whole new CMS Page, including Page Builder widgets on its content:
 
 ```php
