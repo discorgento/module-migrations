@@ -34,9 +34,7 @@ Quick demo/tutorial on how to use it:
 There's also an extended version in Brazillian Portuguese including CMS content management overview available [here](https://odysee.com/@discorgento:8/Introdu%C3%A7%C3%A3o-ao-Modulo-Migrations-Magento-discorgento-module-migrations:9).
 
 ## Usage 🥤
-There's some common stuff when it comes to migrations: changing admin config settings, managing cms content, create product attributes, etc. So for this, we've created some [Facades](https://refactoring.guru/design-patterns/facade) to speed up the repetitive parts.
-
-For example, if you need to create a cms page, instead of writting [all of this](https://magento.stackexchange.com/questions/127495/how-to-add-a-cms-block-programmatically-in-magento-2), you can simply use our CmsPage facade:
+Besides simplifying the basic structure like showed before, we also provide some [facades](https://refactoring.guru/design-patterns/facade) to common tasks like handling [admin config](https://github.com/discorgento/module-migrations/wiki/Admin-Config), [product attributes](https://github.com/discorgento/module-migrations/wiki/Product-Attributes), [cms content](https://github.com/discorgento/module-migrations/wiki/Cms-Content) and [more](https://github.com/discorgento/module-migrations/wiki). As an example, you can use a snippet like this to create a whole new CMS Page, including Page Builder widgets on its content:
 
 ```php
 <?php declare(strict_types=1);
@@ -70,9 +68,9 @@ class CmsPageMyNewPage extends Migration
 }
 ```
 
-Run a `bin/magento setup:upgrade` and navigate to the _/my-new-page route_, the page will be there. And this will be automatically replicated in your staging/production (and even other dev machines) environments.
+Run a `bin/magento setup:upgrade`, navigate to the _/my-new-page path_, and that's it. And naturally as this is part of the deployment of new releases of your store, it will be automatically replicated in your integration/staging/production/whatever environments (and even your coworkers machines).
 
-> 💡 **Tip:** We have facades for the most common tasks we came across so far, **don't forget to check out the [official wiki](https://github.com/discorgento/module-migrations/wiki) to make the most use of this powerful m2 tool ;)**
+> **💡 Tip:**  Don't forget to check our [official wiki](https://github.com/discorgento/module-migrations/wiki) to make the most use of this powerful m2 tool!
 
 ## Notes 🗒
  - roadmap: create cli command to generate migrations for existant cms content (thanks [@vpjoao98](https://github.com/vpjoao98));
