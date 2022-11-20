@@ -10,7 +10,7 @@
 
 <p align="center">Our Sponsors</p>
 <p align="center">
-    <a href="https://www.caravelx.com/"><img src="docs/sponsors/caravelx.svg" alt="Caravel X"></a>
+    <a href="https://www.caravel.com.br/"><img src="docs/sponsors/caravelx.svg" alt="Caravel X"></a>
 </p>
 
 ## Overview 💭
