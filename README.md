@@ -18,7 +18,7 @@ Just changed something on the admin panel or on the database and now you need to
 
 Probably you already heard about [data patches](https://developer.adobe.com/commerce/php/development/components/declarative-schema/patches/), but what if I say that it can be really, really simplified?  
 
-![image](https://user-images.githubusercontent.com/4603111/202905621-b9a89732-1812-4929-a9c5-a87a8b02278e.png)
+![image](docs/tldr.png)
 From 50 lines to just 15, or simply 70% less code. SEVENTY percent fewer lines.
 But we're just getting started.
 
