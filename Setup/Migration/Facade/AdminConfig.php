@@ -28,7 +28,7 @@ class AdminConfig
      */
     public function get($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = null)
     {
-        $this->scopeConfig->getValue($path, $scope, $scopeId);
+        return $this->scopeConfig->getValue($path, $scope, $scopeId);
     }
 
     /**
