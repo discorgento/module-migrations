@@ -54,14 +54,6 @@ abstract class EavAttribute implements ScopedAttributeInterface
     }
 
     /**
-     * Mass update attributes of current entity
-     *
-     * @param array $entityIds
-     * @param array $data
-     */
-    abstract public function massUpdate($entityIds, $data);
-
-    /**
      * Retrieve a fresh instance of the EavSetup
      * @return \Magento\Eav\Setup\EavSetup
      */
