@@ -122,6 +122,13 @@ class ProductAttribute extends EavAttribute
         $this->attributeManagement->unassign($attributeSetId, $attributeCode);
     }
 
+    /**
+     * Update given attribute value for multiple products at once
+     *
+     * @param array $entityIds
+     * @param array $data
+     * @return void
+     */
     public function massUpdate($entityIds, $data)
     {
         $this->productAction->updateAttributes(

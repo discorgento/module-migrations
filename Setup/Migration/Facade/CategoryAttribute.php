@@ -22,8 +22,13 @@ class CategoryAttribute extends EavAttribute
     }
 
     /**
-     * @inheritDoc
+     * Update given attribute value for multiple categories at once
+     *
      * @todo Find a faster way of doing this, like with the products
+     *
+     * @param array $entityIds
+     * @param array $data
+     * @return void
      */
     public function massUpdate($entityIds, $data)
     {
