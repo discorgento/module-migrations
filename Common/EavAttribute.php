@@ -3,6 +3,7 @@
 
 namespace Discorgento\Migrations\Common;
 
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -11,12 +12,26 @@ abstract class EavAttribute implements ScopedAttributeInterface
 {
     public const ENTITY_TYPE = 'OVERRIDE THIS IS CHILD CLASSES';
 
-    protected EavSetupFactory $eavSetupFactory;
-    protected ResourceConnection $resourceConnection;
+    /**
+     * @var Config
+     */
+    protected $config;
 
+    /**
+     * @var EavSetupFactory
+     */
+    protected $eavSetupFactory;
+
+    /**
+     * @var ResourceConnection
+     */
+    protected $resourceConnection;
+
+    // phpcs:ignore
     public function __construct(
         EavAttribute\Context $context
     ) {
+        $this->config = $context->config;
         $this->eavSetupFactory = $context->eavSetupFactory;
         $this->resourceConnection = $context->resourceConnection;
     }
@@ -54,7 +69,19 @@ abstract class EavAttribute implements ScopedAttributeInterface
     }
 
     /**
+     * Check if given attribute exists
+     *
+     * @param string $code
+     * @return bool
+     */
+    public function exists($code)
+    {
+        return (bool) $this->config->getAttribute(static::ENTITY_TYPE, $code)->getId();
+    }
+
+    /**
      * Retrieve a fresh instance of the EavSetup
+     *
      * @return \Magento\Eav\Setup\EavSetup
      */
     protected function getEavSetup()
@@ -84,14 +111,16 @@ abstract class EavAttribute implements ScopedAttributeInterface
 
     /**
      * Retrieve entity type if
+     *
      * @return int
      */
     protected function getEntityTypeId()
     {
         $tableName = $this->getTableName('eav_entity_type');
+        $select = $this->getConnection()->select()
+            ->from($tableName, 'entity_type_id')
+            ->where('entity_type_code=?', static::ENTITY_TYPE);
 
-        return (int) $this->getConnection()->fetchOne(<<<SQL
-            SELECT entity_type_id FROM $tableName WHERE entity_type_code = :entity_type_code
-        SQL, ['entity_type_code' => static::ENTITY_TYPE]);
+        return (int) $this->getConnection()->fetchOne($select);
     }
 }
