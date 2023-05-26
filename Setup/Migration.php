@@ -8,14 +8,14 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
-abstract class Migration implements
-    DataPatchInterface,
-    PatchRevertableInterface
+abstract class Migration implements DataPatchInterface, PatchRevertableInterface
 {
     protected const AREA_CODE = null;
 
-    private Migration\Context $context;
+    /** @var Migration\Context */
+    private $context;
 
+    // phpcs:ignore
     public function __construct(
         Migration\Context $context
     ) {
@@ -29,13 +29,17 @@ abstract class Migration implements
 
     /**
      * Undo/revert the migration (optional)
+     *
+     * @return void
      */
     protected function rollback()
     {
         // optional, override to implement an undo feature in your migration
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     final public function apply()
     {
         $this->getConnection()->startSetup();
@@ -53,7 +57,9 @@ abstract class Migration implements
         $this->getConnection()->endSetup();
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     final public function revert()
     {
         $this->getConnection()->startSetup();
@@ -64,22 +70,25 @@ abstract class Migration implements
     /**
      * Shorthand for getting the database connection
      */
-    protected function getConnection() : AdapterInterface
+    protected function getConnection(): AdapterInterface
     {
         return $this->getModuleDataSetup()->getConnection();
     }
 
     /**
-     * Get given table final name in database,
-     * including prefix and etc
+     * Get given table name in database including prefix
+     *
+     * @param string $rawName
+     * @return string
      */
-    protected function getTableName(string $rawName) : string
+    protected function getTableName(string $rawName): string
     {
         return $this->getModuleDataSetup()->getTable($rawName);
     }
 
     /**
      * Module Setup Data getter
+     *
      * @return ModuleDataSetupInterface
      */
     protected function getModuleDataSetup()
@@ -87,13 +96,17 @@ abstract class Migration implements
         return $this->context->moduleDataSetup;
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritDoc
+     */
     public function getAliases()
     {
         return [];
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritDoc
+     */
     public static function getDependencies()
     {
         return [];
