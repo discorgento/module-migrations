@@ -3,6 +3,8 @@
 
 namespace Discorgento\Migrations\Common;
 
+use Magento\Cms\Api\Data\BlockInterface as Block;
+use Magento\Cms\Api\Data\PageInterface as Page;
 use Magento\Cms\Model\BlockFactory;
 use Magento\Cms\Model\BlockRepository;
 use Magento\Cms\Model\PageFactory;
@@ -22,6 +24,7 @@ abstract class Cms
     /** @var BlockRepository|PageRepository */
     protected $repository;
 
+    // phpcs:ignore
     public function __construct(
         $collectionFactory,
         $factory,
@@ -30,6 +33,20 @@ abstract class Cms
         $this->collectionFactory = $collectionFactory;
         $this->repository = $repository;
         $this->factory = $factory;
+    }
+
+    /**
+     * Load cms content data by given identifier
+     *
+     * @param string $identifier
+     * @param int $storeId
+     * @return Block|Page
+     */
+    public function get(string $identifier, $storeId = null)
+    {
+        $id = $this->findId($identifier, $storeId);
+
+        return $this->repository->getById($id);
     }
 
     /**
@@ -60,8 +77,7 @@ abstract class Cms
      */
     public function update($identifier, $data, $storeId = null)
     {
-        $id = $this->findId($identifier, $storeId);
-        $model = $this->repository->getById($id);
+        $model = $this->get($identifier);
         $model->addData($data);
 
         return $this->repository->save($model);
