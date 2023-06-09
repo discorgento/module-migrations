@@ -68,6 +68,23 @@ abstract class Cms
     }
 
     /**
+     * Create a new content only if it not exists yet
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param int|null $storeId
+     * @return Block|Page
+     */
+    public function safeCreate($identifier, $data, $storeId = null)
+    {
+        if ($this->exists($identifier, $storeId)) {
+            return $this->get($identifier, $storeId);
+        }
+
+        return $this->create($identifier, $data, $storeId);
+    }
+
+    /**
      * Update cms content based on given identifier
      *
      * @param string $identifier
@@ -77,10 +94,27 @@ abstract class Cms
      */
     public function update($identifier, $data, $storeId = null)
     {
-        $model = $this->get($identifier);
+        $model = $this->get($identifier, $storeId);
         $model->addData($data);
 
         return $this->repository->save($model);
+    }
+
+    /**
+     * Update cms content only if it already exists
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param int|null $storeId
+     * @return Block|Page|null
+     */
+    public function safeUpdate($identifier, $data, $storeId = null)
+    {
+        if (!$this->exists($identifier, $storeId)) {
+            return null;
+        }
+
+        return $this->update($identifier, $data, $storeId);
     }
 
     /**
