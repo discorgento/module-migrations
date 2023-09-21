@@ -14,7 +14,7 @@
 </p>
 
 ## Overview 💭
-Just changed something on the admin panel or on the database and now you need to replicate it again in staging and production? No worries, [we](https://discord.io/Discorgento) got you covered.
+Just changed something on the admin panel or on the database and now you need to replicate it again in staging and production? No worries, [we](https://discorgento.com/discord) got you covered.
 
 Probably you already heard about [data patches](https://developer.adobe.com/commerce/php/development/components/declarative-schema/patches/), but what if I say that it can be really, really simplified?  
 
@@ -74,4 +74,4 @@ Run a `bin/magento setup:upgrade`, navigate to the _/my-new-page path_, and that
 ## Notes 🗒
  - roadmap: create cli command to generate migrations for existant cms content (thanks [@vpjoao98](https://github.com/vpjoao98));
  - issues and PRs are welcome in this repo;
- - we want **YOU** for [our community](https://discord.io/Discorgento)!
+ - we want **YOU** for [our community](https://discorgento.com/discord)!
