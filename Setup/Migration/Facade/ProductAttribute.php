@@ -16,9 +16,14 @@ class ProductAttribute extends EavAttribute
 {
     public const ENTITY_TYPE = ProductAttributeInterface::ENTITY_TYPE_CODE;
 
-    private AttributeManagement $attributeManagement;
-    private AttributeSetRepository $attributeSetRepository;
-    private ProductAction $productAction;
+    /** @var AttributeManagement */
+    private $attributeManagement;
+
+    /** @var AttributeSetRepository */
+    private $attributeSetRepository;
+
+    /** @var ProductAction */
+    private $productAction;
 
     public function __construct(
         EavAttribute\Context $context,

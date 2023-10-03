@@ -8,8 +8,11 @@ use Magento\Framework\App\Config\Storage\WriterInterface as ConfigWriter;
 
 class AdminConfig
 {
-    protected ConfigWriter $configWriter;
-    protected ScopeConfig $scopeConfig;
+    /** @var ConfigWriter */
+    protected $configWriter;
+
+    /** @var ScopeConfig */
+    protected $scopeConfig;
 
     public function __construct(
         ConfigWriter $configWriter,
