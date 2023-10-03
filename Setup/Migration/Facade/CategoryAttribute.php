@@ -11,7 +11,8 @@ class CategoryAttribute extends EavAttribute
 {
     public const ENTITY_TYPE = CategoryAttributeInterface::ENTITY_TYPE_CODE;
 
-    private CategoryRepositoryInterface $categoryRepository;
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
 
     public function __construct(
         EavAttribute\Context $context,
