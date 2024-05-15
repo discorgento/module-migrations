@@ -10,6 +10,7 @@ use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFa
 
 class CmsBlock extends Cms
 {
+    // phpcs:ignore
     public function __construct(
         BlockCollectionFactory $collectionFactory,
         BlockFactory $factory,

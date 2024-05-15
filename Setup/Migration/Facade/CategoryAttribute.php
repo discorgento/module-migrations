@@ -14,6 +14,7 @@ class CategoryAttribute extends EavAttribute
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
 
+    // phpcs:ignore
     public function __construct(
         EavAttribute\Context $context,
         CategoryRepositoryInterface $categoryRepository

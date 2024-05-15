@@ -25,6 +25,7 @@ class ProductAttribute extends EavAttribute
     /** @var ProductAction */
     private $productAction;
 
+    // phpcs:ignore
     public function __construct(
         EavAttribute\Context $context,
         AttributeManagement $attributeManagement,
@@ -53,7 +54,7 @@ class ProductAttribute extends EavAttribute
                 'label' => $label,
                 'input' => 'select',
                 'type' => 'int',
-                'source_model' => 'Magento\\Eav\\Model\\Entity\\Attribute\\Source\\Table',
+                'source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Table::class,
                 'filterable' => 1,
                 'required' => false,
                 'option' => ['values' => $values],
@@ -150,7 +151,7 @@ class ProductAttribute extends EavAttribute
      */
     private function resolveAttributeSetId($attributeSet = null) : int
     {
-        if (is_null($attributeSet)) {
+        if ($attributeSet === null) {
             return $this->getDefaultAttributeSetId();
         }
 
@@ -182,7 +183,7 @@ class ProductAttribute extends EavAttribute
      */
     private function resolveGroupId($group, $attributeSet = null) : int
     {
-        if (is_null($group)) {
+        if ($group === null) {
             return $this->getDefaultGroupId($attributeSet);
         }
 
