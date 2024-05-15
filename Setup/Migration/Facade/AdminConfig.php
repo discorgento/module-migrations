@@ -14,6 +14,7 @@ class AdminConfig
     /** @var ScopeConfig */
     protected $scopeConfig;
 
+    // phpcs:ignore
     public function __construct(
         ConfigWriter $configWriter,
         ScopeConfig $scopeConfig
@@ -60,8 +61,7 @@ class AdminConfig
     }
 
     /**
-     * Delete given config from core_config_data,
-     * thus restoring it to the default config.xml value.
+     * Exclude given config from core_config_data, thus restoting it to the default value set at its config.xml
      *
      * @param string|array $path
      * @param string $scope
@@ -76,12 +76,15 @@ class AdminConfig
     }
 
     /**
-     * Alias to ->restore() for backwards compatibility purposes
+     * Reset given config(s) to it's original config.xml value
      *
-     * @deprecated 2.0.3
+     * @deprecated 2.0.3 replaced with "restore" to match the admin settings naming
+     * @see Discorgento\Migrations\Setup\Migration\Facade\AdminConfig::restore
+     *
      * @param string|array $path
      * @param string $scope
      * @param int $scopeId
+     * @return void
      */
     public function reset($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {

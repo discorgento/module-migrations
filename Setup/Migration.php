@@ -39,6 +39,8 @@ abstract class Migration implements DataPatchInterface, PatchRevertableInterface
 
     /**
      * @inheritDoc
+     *
+     * No reason to use the raw apply() method, use execute() instead
      */
     final public function apply()
     {
@@ -68,6 +70,8 @@ abstract class Migration implements DataPatchInterface, PatchRevertableInterface
 
     /**
      * @inheritDoc
+     *
+     * No reason to use the raw revert() method, use rollback() instead
      */
     final public function revert()
     {

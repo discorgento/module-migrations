@@ -10,6 +10,7 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFact
 
 class CmsPage extends Cms
 {
+    // phpcs:ignore
     public function __construct(
         PageCollectionFactory $collectionFactory,
         PageFactory $factory,
