@@ -99,8 +99,8 @@ class ProductAttribute extends EavAttribute
      */
     private function assignToAttributeSetLegacy($attributeCode, $options = [])
     {
-        $attributeSetId = intval($options['attribute_set_id'] ??
-            $this->getEavSetup()->getDefaultAttributeSetId(self::ENTITY_TYPE));
+        $attributeSetId = (int) ($options['attribute_set_id'] ?? $this->getEavSetup()
+            ->getDefaultAttributeSetId(self::ENTITY_TYPE));
 
         $attributeGroupId = $options['group_id'] ?? $this->getDefaultGroupId($attributeSetId);
         $sortOrder = $options['sort_order'] ?? 999;
@@ -160,10 +160,11 @@ class ProductAttribute extends EavAttribute
         }
 
         if (!is_int($attributeSet)) {
-            $attributeSetId = $this->getConnection()->fetchOne(<<<SQL
-                SELECT attribute_set_id FROM {$this->getTableName('eav_attribute_set')}
-                WHERE attribute_set_name = ? AND entity_type_id = ?
-            SQL, [$attributeSet, $this->getEntityTypeId()]);
+            $select = $this->getConnection()->select()
+                ->from($this->getTableName('eav_attribute_set'), 'attribute_set_id')
+                ->where('attribute_set_name = ?', $attributeSet)
+                ->where('entity_type_id = ?', $this->getEntityTypeId());
+            $attributeSetId = $this->getConnection()->fetchOne($select);
 
             if (empty($attributeSetId)) {
                 throw new NoSuchEntityException(__("Attribute Set with name $attributeSet not found"));
@@ -192,10 +193,11 @@ class ProductAttribute extends EavAttribute
         }
 
         if (!is_int($group)) {
-            $groupId = $this->getConnection()->fetchOne(<<<SQL
-                SELECT attribute_group_id FROM {$this->getTableName('eav_attribute_group')}
-                WHERE attribute_group_name = ? AND attribute_set_id = ?
-            SQL, [$group, $this->resolveAttributeSetId($attributeSet)]);
+            $select = $this->getConnection()->select()
+                ->from($this->getTableName('eav_attribute_group'), 'attribute_group_id')
+                ->where('attribute_group_name = ?', $group)
+                ->where('attribute_set_id = ?', $this->resolveAttributeSetId($attributeSet));
+            $groupId = $this->getConnection()->fetchOne($select);
 
             if (empty($groupId)) {
                 throw new NoSuchEntityException(__("Attribute Group with name $attributeSet not found"));
@@ -240,12 +242,16 @@ class ProductAttribute extends EavAttribute
         $entityTypeId = $this->getEntityTypeId();
         $attributeSetId = $this->resolveAttributeSetId($attributeSet);
 
-        return ((int) $this->getConnection()->fetchOne(<<<SQL
-            SELECT sort_order FROM {$this->getTableName('eav_entity_attribute')}
-            WHERE entity_type_id = ? AND attribute_set_id = ? AND attribute_id = (
-                SELECT attribute_id FROM {$this->getTableName('eav_attribute')}
-                WHERE attribute_code = ?
-            )
-        SQL, [$entityTypeId, $attributeSetId, $attributeCode])) ?: 999;
+        $attributeIdSelect = $this->getConnection()->select()
+            ->from($this->getTableName('eav_attribute'), 'attribute_id')
+            ->where('attribute_code = ?', $attributeCode);
+
+        $select = $this->getConnection()->select()
+            ->from($this->getTableName('eav_entity_attribute'), 'sort_order')
+            ->where('entity_type_id = ?', $entityTypeId)
+            ->where('attribute_set_id = ?', $attributeSetId)
+            ->where('attribute_id = ?', $attributeIdSelect);
+
+        return (int) $this->getConnection()->fetchOne($select) ?: 999;
     }
 }
