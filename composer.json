@@ -4,7 +4,7 @@
     "type": "magento2-module",
     "license": "MIT",
     "require": {
-        "php": ">=7.3.0 <8.2"
+        "php": ">=7.3.0 <8.4"
     },
     "autoload": {
         "files": [

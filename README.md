@@ -23,7 +23,7 @@ From 50 lines to just 15, or simply 70% less code. SEVENTY percent fewer lines.
 But we're just getting started.
 
 ## Install 🔧
-This module is compatible with both Magento 2.3 and 2.4, from PHP 7.3 to 8.1.
+This module is compatible with both Magento 2.3 and 2.4, from PHP 7.3 to 8.3.
 ```
 composer require discorgento/module-migrations:^2 && bin/magento setup:upgrade
 ```
