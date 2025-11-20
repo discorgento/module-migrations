@@ -118,6 +118,23 @@ abstract class Cms
     }
 
     /**
+     * Create content with given identifier, or update it if already exists
+     *
+     * @param string $identifier
+     * @param array $data
+     * @param int|null $storeId
+     * @return Block|Page
+     */
+    public function createOrUpdate($identifier, $data, $storeId = null)
+    {
+        if ($this->exists($identifier, $storeId)) {
+            return $this->update($identifier, $data, $storeId);
+        }
+
+        return $this->create($identifier, $data, $storeId);
+    }
+
+    /**
      * Delete cms content by given id
      * (row_id on database)
      *
