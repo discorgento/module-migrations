@@ -105,4 +105,31 @@ class AdminConfig
         $newValue = $oldValue . $value;
         $this->configWriter->save($path, $newValue, $scope, $scopeId ?: 0);
     }
+
+    /**
+     * Append an option to an array config (multi-select dropdown, multi-line text, etc)
+     *
+     * @param string $path
+     * @param string|int|array $option
+     * @param string $separator
+     * @param string $scope
+     * @param int $scopeId
+     */
+    public function appendOption(
+        $path,
+        $option,
+        $separator = ',',
+        $scope = ScopeConfig::SCOPE_TYPE_DEFAULT,
+        $scopeId = null
+    ) {
+        $oldValueRaw = $this->scopeConfig->getValue($path, $scope, $scopeId);
+        $oldValue = $oldValueRaw ? \explode($separator, $oldValueRaw) : [];
+        if (!is_array($option)) {
+            $option = [$option];
+        }
+
+        $newValue = \array_unique(\array_merge($oldValue, $option));
+        $newValueRaw = \implode($separator, $newValue);
+        $this->configWriter->save($path, $newValueRaw, $scope, $scopeId ?: 0);
+    }
 }
