@@ -4,6 +4,7 @@
 namespace Discorgento\Migrations\Setup\Migration\Facade;
 
 use Discorgento\Migrations\Common\Cms;
+use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Cms\Model\PageFactory;
 use Magento\Cms\Model\PageRepository;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
@@ -14,8 +15,9 @@ class CmsPage extends Cms
     public function __construct(
         PageCollectionFactory $collectionFactory,
         PageFactory $factory,
-        PageRepository $repository
+        PageRepository $repository,
+        GetPageByIdentifierInterface $getByIdentifier
     ) {
-        parent::__construct($collectionFactory, $factory, $repository);
+        parent::__construct($collectionFactory, $factory, $repository, $getByIdentifier);
     }
 }

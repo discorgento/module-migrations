@@ -3,36 +3,33 @@
 
 namespace Discorgento\Migrations\Common;
 
-use Magento\Cms\Api\Data\BlockInterface as Block;
-use Magento\Cms\Api\Data\PageInterface as Page;
-use Magento\Cms\Model\BlockFactory;
-use Magento\Cms\Model\BlockRepository;
-use Magento\Cms\Model\PageFactory;
-use Magento\Cms\Model\PageRepository;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 abstract class Cms
 {
-    /** @var BlockCollectionFactory|PageCollectionFactory */
+    /** @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\Magento\Cms\Model\ResourceModel\Page\CollectionFactory */
     protected $collectionFactory;
 
-    /** @var BlockFactory|PageFactory */
+    /** @var \Magento\Cms\Model\BlockFactory|\Magento\Cms\Model\PageFactory */
     protected $factory;
 
-    /** @var BlockRepository|PageRepository */
+    /** @var \Magento\Cms\Model\BlockRepository|\Magento\Cms\Model\PageRepository */
     protected $repository;
+
+    /** @var \Magento\Cms\Api\GetBlockByIdentifierInterface|\Magento\Cms\Api\GetPageByIdentifierInterface */
+    protected $getByIdentifier;
 
     // phpcs:ignore
     public function __construct(
         $collectionFactory,
         $factory,
-        $repository
+        $repository,
+        $getByIdentifier
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->repository = $repository;
         $this->factory = $factory;
+        $this->getByIdentifier = $getByIdentifier;
     }
 
     /**
@@ -40,13 +37,14 @@ abstract class Cms
      *
      * @param string $identifier
      * @param int $storeId
-     * @return Block|Page
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
     public function get(string $identifier, $storeId = null)
     {
-        $id = $this->findId($identifier, $storeId);
-
-        return $this->repository->getById($id);
+        return $this->getByIdentifier->execute(
+            $identifier,
+            (int) ($storeId ?? 0)
+        );
     }
 
     /**
@@ -55,7 +53,7 @@ abstract class Cms
      * @param string $identifier
      * @param array $data
      * @param int|null $storeId
-     * @return Block|Page
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
     public function create($identifier, $data, $storeId = null)
     {
@@ -73,7 +71,7 @@ abstract class Cms
      * @param string $identifier
      * @param array $data
      * @param int|null $storeId
-     * @return Block|Page
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
     public function safeCreate($identifier, $data, $storeId = null)
     {
@@ -90,7 +88,7 @@ abstract class Cms
      * @param string $identifier
      * @param array $data
      * @param int|null $storeId
-     * @return Block|Page
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
     public function update($identifier, $data, $storeId = null)
     {
@@ -106,7 +104,7 @@ abstract class Cms
      * @param string $identifier
      * @param array $data
      * @param int|null $storeId
-     * @return Block|Page|null
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface|null
      */
     public function safeUpdate($identifier, $data, $storeId = null)
     {
@@ -123,7 +121,7 @@ abstract class Cms
      * @param string $identifier
      * @param array $data
      * @param int|null $storeId
-     * @return Block|Page
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
     public function createOrUpdate($identifier, $data, $storeId = null)
     {
