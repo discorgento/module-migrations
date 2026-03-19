@@ -29,7 +29,9 @@ Magento 2 module that simplifies Magento data patches via a base `Migration` cla
 
 ### CMS Content (`Migration\Facade\CmsPage`, `Migration\Facade\CmsBlock`)
 - `create($identifier, $data, $storeId)` — create a new page/block entry in the database
+- `createIfNotExists($identifier, $data, $storeId)` — create only when identifier does not exist yet
 - `update($identifier, $data, $storeId)` — update the content of an existing page/block
+- `updateIfExists($identifier, $data, $storeId)` — update only when identifier already exists; no-op (returns `null`) otherwise
 - `createOrUpdate($identifier, $data, $storeId)` — update if already exists, otherwise create
 - `delete($identifier, $storeId)` — delete a page/block by identifier, optionally scoped to a store
 - `exists($identifier, $storeId)` — check if a page/block with the given identifier already exists
@@ -37,7 +39,9 @@ Magento 2 module that simplifies Magento data patches via a base `Migration` cla
 ### EAV Attributes (base capabilities)
 Shared by category/customer/product attribute facades:
 - `create($code, $data)` — create a new attribute with the given data (same interface as native `addAttribute()`)
+- `createIfNotExists($code, $data)` — create only when the attribute code does not exist yet
 - `update($code, $data)` — update an existing attribute's properties
+- `updateIfExists($code, $data)` — update only when the attribute code already exists; no-op otherwise
 - `exists($code)` — check if an attribute with the given code already exists for the entity
 
 ### Category Attributes (`Migration\Facade\CategoryAttribute`)
@@ -45,11 +49,12 @@ Shared by category/customer/product attribute facades:
 - `massUpdate($entityIds, $data)` — update attribute *values* on multiple existing categories at once
 
 ### Customer Attributes (`Migration\Facade\CustomerAttribute`)
-- Inherits EAV methods (`create`, `update`, `exists`)
+- Inherits EAV methods (`create`, `createIfNotExists`, `update`, `updateIfExists`, `exists`)
 
 ### Product Attributes (`Migration\Facade\ProductAttribute`)
-- Inherits EAV methods (`create`, `update`, `exists`)
+- Inherits EAV methods (`create`, `createIfNotExists`, `update`, `updateIfExists`, `exists`)
 - `createDropdown($code, $label, $values, $config)` — shorthand to create a dropdown/select attribute with the given options
+- `createDropdownIfNotExists($code, $label, $values, $config)` — create dropdown only when attribute code does not exist yet
 - `assignToAttributeSet($code, $attributeSet, $group, $after)` — assign an attribute to an attribute set/group, simulating the admin "Stores → Attribute Sets" flow
 - `unassignFromAttributeSet($attributeCode, $attributeSetId)` — remove an attribute from an attribute set
 - `massUpdate($entityIds, $data)` — update attribute *values* on multiple existing products at once

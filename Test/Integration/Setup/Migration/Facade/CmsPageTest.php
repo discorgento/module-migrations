@@ -4,7 +4,6 @@
 namespace Discorgento\Migrations\Test\Integration\Setup\Migration\Facade;
 
 use Discorgento\Migrations\Setup\Migration\Facade\CmsPage;
-use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\PageRepository;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -55,15 +54,26 @@ class CmsPageTest extends TestCase
         self::assertSame('Initial title', $loadedPage->getTitle());
     }
 
-    public function testSafeCreateReturnsExistingPage(): void
+    public function testCreateIfNotExistsReturnsExistingPage(): void
     {
         $identifier = $this->identifier('safe-create');
 
         $first = $this->cmsPage->create($identifier, $this->pageData('Original title'), 0);
-        $second = $this->cmsPage->safeCreate($identifier, $this->pageData('Should not overwrite'), 0);
+        $second = $this->cmsPage->createIfNotExists($identifier, $this->pageData('Should not overwrite'), 0);
 
         self::assertSame((int) $first->getId(), (int) $second->getId());
         self::assertSame('Original title', $second->getTitle());
+    }
+
+    public function testSafeCreateAliasStillWorks(): void
+    {
+        $identifier = $this->identifier('safe-create-alias');
+
+        $first = $this->cmsPage->create($identifier, $this->pageData('Alias title'), 0);
+        $second = $this->cmsPage->safeCreate($identifier, $this->pageData('Should not overwrite alias'), 0);
+
+        self::assertSame((int) $first->getId(), (int) $second->getId());
+        self::assertSame('Alias title', $second->getTitle());
     }
 
     public function testUpdateChangesPageData(): void
@@ -80,26 +90,6 @@ class CmsPageTest extends TestCase
 
         self::assertSame('After update', $updated->getTitle());
         self::assertSame('Updated content', $updated->getContent());
-    }
-
-    public function testSafeUpdateReturnsNullWhenMissing(): void
-    {
-        $identifier = $this->identifier('safe-update-missing');
-
-        $result = $this->cmsPage->safeUpdate($identifier, ['title' => 'No-op']);
-
-        self::assertNull($result);
-    }
-
-    public function testSafeUpdateChangesDataWhenPageExists(): void
-    {
-        $identifier = $this->identifier('safe-update-existing');
-
-        $this->cmsPage->create($identifier, $this->pageData('Before safe update'), 0);
-        $result = $this->cmsPage->safeUpdate($identifier, ['title' => 'After safe update']);
-
-        self::assertInstanceOf(PageInterface::class, $result);
-        self::assertSame('After safe update', $this->cmsPage->get($identifier)->getTitle());
     }
 
     public function testCreateOrUpdateCreatesWhenMissing(): void

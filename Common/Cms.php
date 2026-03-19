@@ -53,6 +53,8 @@ abstract class Cms
      * @param string $identifier
      * @param array $data
      * @param int|null $storeId
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     *   When a CMS content with the same identifier already exists.
      * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
     public function create($identifier, $data, $storeId = null)
@@ -73,13 +75,28 @@ abstract class Cms
      * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
      */
-    public function safeCreate($identifier, $data, $storeId = null)
+    public function createIfNotExists($identifier, $data, $storeId = null)
     {
         if ($this->exists($identifier, $storeId)) {
             return $this->get($identifier, $storeId);
         }
 
         return $this->create($identifier, $data, $storeId);
+    }
+
+    /**
+     * Deprecated alias of createIfNotExists for backward compatibility.
+     *
+     * @deprecated 2.9.0 safe prefix is ambiguous; use createIfNotExists for explicit behavior.
+     * @see \Discorgento\Migrations\Common\Cms::createIfNotExists
+     * @param string $identifier
+     * @param array $data
+     * @param int|null $storeId
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface
+     */
+    public function safeCreate($identifier, $data, $storeId = null)
+    {
+        return $this->createIfNotExists($identifier, $data, $storeId);
     }
 
     /**
@@ -106,13 +123,28 @@ abstract class Cms
      * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface|null
      */
-    public function safeUpdate($identifier, $data, $storeId = null)
+    public function updateIfExists($identifier, $data, $storeId = null)
     {
         if (!$this->exists($identifier, $storeId)) {
             return null;
         }
 
         return $this->update($identifier, $data, $storeId);
+    }
+
+    /**
+     * Deprecated alias of updateIfExists for backward compatibility.
+     *
+     * @deprecated 2.9.0 safe prefix is ambiguous; use updateIfExists for explicit behavior.
+     * @see \Discorgento\Migrations\Common\Cms::updateIfExists
+     * @param string $identifier
+     * @param array $data
+     * @param int|null $storeId
+     * @return \Magento\Cms\Api\Data\BlockInterface|\Magento\Cms\Api\Data\PageInterface|null
+     */
+    public function safeUpdate($identifier, $data, $storeId = null)
+    {
+        return $this->updateIfExists($identifier, $data, $storeId);
     }
 
     /**

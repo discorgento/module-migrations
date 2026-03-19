@@ -90,6 +90,45 @@ class CategoryAttributeTest extends TestCase
         self::assertSame('1', (string) $isRequired);
     }
 
+    public function testCreateIfNotExistsDoesNotOverwriteExistingAttribute(): void
+    {
+        $code = $this->attributeCode('create_if_not_exists');
+
+        $this->categoryAttribute->createIfNotExists($code, [
+            'type' => 'varchar',
+            'label' => 'Initial Category Label',
+            'input' => 'text',
+            'required' => false,
+            'visible' => true,
+            'user_defined' => true,
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'group' => 'General Information',
+        ]);
+
+        $this->categoryAttribute->createIfNotExists($code, [
+            'type' => 'varchar',
+            'label' => 'Overwritten Category Label',
+            'input' => 'text',
+            'required' => false,
+            'visible' => true,
+            'user_defined' => true,
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'group' => 'General Information',
+        ]);
+
+        $attributeId = $this->getAttributeId($code);
+        self::assertNotNull($attributeId);
+
+        $eavSetup = $this->eavSetupFactory->create();
+        $label = $eavSetup->getAttribute(
+            CategoryAttributeInterface::ENTITY_TYPE_CODE,
+            $code,
+            'frontend_label'
+        );
+
+        self::assertSame('Initial Category Label', (string) $label);
+    }
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/category.php
      */

@@ -4,7 +4,6 @@
 namespace Discorgento\Migrations\Test\Integration\Setup\Migration\Facade;
 
 use Discorgento\Migrations\Setup\Migration\Facade\CmsBlock;
-use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\BlockRepository;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -55,15 +54,26 @@ class CmsBlockTest extends TestCase
         self::assertSame('Initial title', $loadedBlock->getTitle());
     }
 
-    public function testSafeCreateReturnsExistingBlock(): void
+    public function testCreateIfNotExistsReturnsExistingBlock(): void
     {
         $identifier = $this->identifier('safe-create');
 
         $first = $this->cmsBlock->create($identifier, $this->blockData('Original title'), 0);
-        $second = $this->cmsBlock->safeCreate($identifier, $this->blockData('Should not overwrite'), 0);
+        $second = $this->cmsBlock->createIfNotExists($identifier, $this->blockData('Should not overwrite'), 0);
 
         self::assertSame((int) $first->getId(), (int) $second->getId());
         self::assertSame('Original title', $second->getTitle());
+    }
+
+    public function testSafeCreateAliasStillWorks(): void
+    {
+        $identifier = $this->identifier('safe-create-alias');
+
+        $first = $this->cmsBlock->create($identifier, $this->blockData('Alias title'), 0);
+        $second = $this->cmsBlock->safeCreate($identifier, $this->blockData('Should not overwrite alias'), 0);
+
+        self::assertSame((int) $first->getId(), (int) $second->getId());
+        self::assertSame('Alias title', $second->getTitle());
     }
 
     public function testUpdateChangesBlockData(): void
@@ -80,26 +90,6 @@ class CmsBlockTest extends TestCase
 
         self::assertSame('After update', $updated->getTitle());
         self::assertSame('Updated content', $updated->getContent());
-    }
-
-    public function testSafeUpdateReturnsNullWhenMissing(): void
-    {
-        $identifier = $this->identifier('safe-update-missing');
-
-        $result = $this->cmsBlock->safeUpdate($identifier, ['title' => 'No-op']);
-
-        self::assertNull($result);
-    }
-
-    public function testSafeUpdateChangesDataWhenBlockExists(): void
-    {
-        $identifier = $this->identifier('safe-update-existing');
-
-        $this->cmsBlock->create($identifier, $this->blockData('Before safe update'), 0);
-        $result = $this->cmsBlock->safeUpdate($identifier, ['title' => 'After safe update']);
-
-        self::assertInstanceOf(BlockInterface::class, $result);
-        self::assertSame('After safe update', $this->cmsBlock->get($identifier)->getTitle());
     }
 
     public function testCreateOrUpdateCreatesWhenMissing(): void

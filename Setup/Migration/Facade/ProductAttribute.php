@@ -64,6 +64,31 @@ class ProductAttribute extends EavAttribute
     }
 
     /**
+     * Shorthand to quickly create a dropdown-type attribute if it not exists yet
+     *
+     * @param string $code
+     * @param string $label
+     * @param array $values
+     * @param array $config
+     */
+    public function createDropdownIfNotExists($code, $label, $values, $config = [])
+    {
+        $this->createIfNotExists(
+            $code,
+            array_merge([
+                'label' => $label,
+                'input' => 'select',
+                'type' => 'int',
+                'source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Table::class,
+                'filterable' => 1,
+                'required' => false,
+                'option' => ['values' => $values],
+                'user_defined' => true,
+            ], $config)
+        );
+    }
+
+    /**
      * Assign an attribute to some attribute set (or default if none specified)
      *
      * @param string $attributeCode

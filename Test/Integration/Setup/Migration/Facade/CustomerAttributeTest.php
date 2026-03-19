@@ -85,6 +85,49 @@ class CustomerAttributeTest extends TestCase
         self::assertSame('1', (string) $isRequired);
     }
 
+    public function testCreateIfNotExistsDoesNotOverwriteExistingAttribute(): void
+    {
+        $code = $this->attributeCode('create_if_not_exists');
+
+        $this->customerAttribute->createIfNotExists($code, [
+            'type' => 'varchar',
+            'label' => 'Initial Customer Label',
+            'input' => 'text',
+            'required' => false,
+            'visible' => true,
+            'user_defined' => true,
+            'system' => 0,
+            'position' => 999,
+        ]);
+
+        $initialAttribute = $this->eavConfig->getAttribute(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $code);
+        $initialAttributeId = (int) $initialAttribute->getId();
+        self::assertGreaterThan(0, $initialAttributeId);
+
+        $this->customerAttribute->createIfNotExists($code, [
+            'type' => 'varchar',
+            'label' => 'Overwritten Customer Label',
+            'input' => 'text',
+            'required' => true,
+            'visible' => true,
+            'user_defined' => true,
+            'system' => 0,
+            'position' => 999,
+        ]);
+
+        $attribute = $this->eavConfig->getAttribute(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $code);
+        $attributeId = (int) $attribute->getId();
+        self::assertSame($initialAttributeId, $attributeId);
+
+        $select = $this->connection->select()
+            ->from($this->eavAttributeTable, ['cnt' => new \Zend_Db_Expr('COUNT(*)')])
+            ->where('attribute_code = ?', $code)
+            ->limit(1);
+
+        $count = $this->connection->fetchOne($select);
+        self::assertSame('1', (string) $count);
+    }
+
     private function removeCreatedAttributes(): void
     {
         $eavSetup = $this->eavSetupFactory->create();

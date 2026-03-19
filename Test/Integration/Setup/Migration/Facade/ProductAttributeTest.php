@@ -108,6 +108,49 @@ class ProductAttributeTest extends TestCase
         self::assertSame('1', (string) $isRequired);
     }
 
+    public function testCreateIfNotExistsDoesNotOverwriteExistingAttribute(): void
+    {
+        $code = $this->attributeCode('create_if_not_exists');
+
+        $this->productAttribute->createIfNotExists($code, [
+            'type' => 'varchar',
+            'label' => 'Initial Product Label',
+            'input' => 'text',
+            'required' => false,
+            'visible' => true,
+            'user_defined' => true,
+            'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+            'group' => 'General',
+        ]);
+
+        $initialAttributeId = $this->getAttributeId($code);
+        self::assertNotNull($initialAttributeId);
+
+        $this->productAttribute->createIfNotExists($code, [
+            'type' => 'varchar',
+            'label' => 'Overwritten Product Label',
+            'input' => 'text',
+            'required' => true,
+            'visible' => true,
+            'user_defined' => true,
+            'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+            'group' => 'General',
+        ]);
+
+        $attributeId = $this->getAttributeId($code);
+        self::assertNotNull($attributeId);
+        self::assertSame($initialAttributeId, $attributeId);
+
+        $select = $this->connection->select()
+            ->from($this->eavAttributeTable, ['cnt' => new \Zend_Db_Expr('COUNT(*)')])
+            ->where('entity_type_id = ?', $this->entityTypeId)
+            ->where('attribute_code = ?', $code)
+            ->limit(1);
+
+        $count = $this->connection->fetchOne($select);
+        self::assertSame('1', (string) $count);
+    }
+
     public function testCreateDropdownCreatesSelectableAttribute(): void
     {
         $code = $this->attributeCode('dropdown');
@@ -122,6 +165,36 @@ class ProductAttributeTest extends TestCase
         $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $code);
 
         self::assertTrue($this->productAttribute->exists($code));
+        self::assertSame('select', $attribute->getFrontendInput());
+    }
+
+    public function testCreateDropdownIfNotExistsDoesNotOverwriteExistingAttribute(): void
+    {
+        $code = $this->attributeCode('dropdown_if_not_exists');
+
+        $this->productAttribute->createDropdownIfNotExists(
+            $code,
+            'Initial Dropdown Label',
+            ['Initial Option'],
+            ['global' => ScopedAttributeInterface::SCOPE_GLOBAL]
+        );
+
+        $initialAttributeId = $this->getAttributeId($code);
+        self::assertNotNull($initialAttributeId);
+
+        $this->productAttribute->createDropdownIfNotExists(
+            $code,
+            'Overwritten Dropdown Label',
+            ['Different Option'],
+            ['global' => ScopedAttributeInterface::SCOPE_GLOBAL]
+        );
+
+        $attributeId = $this->getAttributeId($code);
+        self::assertNotNull($attributeId);
+        self::assertSame($initialAttributeId, $attributeId);
+
+        $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $code);
+        self::assertSame('Initial Dropdown Label', (string) $attribute->getFrontendLabel());
         self::assertSame('select', $attribute->getFrontendInput());
     }
 

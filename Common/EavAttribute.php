@@ -3,27 +3,24 @@
 
 namespace Discorgento\Migrations\Common;
 
-use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 
 abstract class EavAttribute implements ScopedAttributeInterface
 {
     public const ENTITY_TYPE = 'OVERRIDE THIS IS CHILD CLASSES';
 
     /**
-     * @var Config
+     * @var \Magento\Eav\Model\Config
      */
     protected $config;
 
     /**
-     * @var EavSetupFactory
+     * @var \Magento\Eav\Setup\EavSetupFactory
      */
     protected $eavSetupFactory;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resourceConnection;
 
@@ -41,6 +38,8 @@ abstract class EavAttribute implements ScopedAttributeInterface
      *
      * @param string $code
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
+     *   When trying to create an attribute that already exists (or with invalid definition).
      * @return \Magento\Eav\Setup\EavSetup
      */
     public function create($code, $data)
@@ -50,6 +49,22 @@ abstract class EavAttribute implements ScopedAttributeInterface
             $code,
             $data
         );
+    }
+
+    /**
+     * Create a new attribute only when it does not exist yet
+     *
+     * @param string $code
+     * @param array $data
+     * @return void
+     */
+    public function createIfNotExists($code, $data)
+    {
+        if ($this->getEavSetup()->getAttributeId(static::ENTITY_TYPE, $code)) {
+            return;
+        }
+
+        $this->create($code, $data);
     }
 
     /**
@@ -66,6 +81,22 @@ abstract class EavAttribute implements ScopedAttributeInterface
             $code,
             $data
         );
+    }
+
+    /**
+     * Update an existing attribute only when it already exists
+     *
+     * @param string $code
+     * @param array $data
+     * @return void
+     */
+    public function updateIfExists($code, $data)
+    {
+        if (!$this->exists($code)) {
+            return;
+        }
+
+        $this->update($code, $data);
     }
 
     /**
@@ -98,8 +129,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
     }
 
     /**
-     * Retrieve given table name on database,
-     * with preffix and etc if applicable
+     * Retrieve given table name on database with prefix and etc if applicable.
      *
      * @param string $rawTableName
      * @return string
