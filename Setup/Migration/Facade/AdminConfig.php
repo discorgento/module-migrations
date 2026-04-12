@@ -3,21 +3,21 @@
 
 namespace Discorgento\Migrations\Setup\Migration\Facade;
 
-use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfig;
-use Magento\Framework\App\Config\Storage\WriterInterface as ConfigWriter;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 
 class AdminConfig
 {
-    /** @var ConfigWriter */
+    /** @var WriterInterface */
     protected $configWriter;
 
-    /** @var ScopeConfig */
+    /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
     // phpcs:ignore
     public function __construct(
-        ConfigWriter $configWriter,
-        ScopeConfig $scopeConfig
+        WriterInterface $configWriter,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->configWriter = $configWriter;
         $this->scopeConfig = $scopeConfig;
@@ -30,7 +30,7 @@ class AdminConfig
      * @param string $scope
      * @param int $scopeId
      */
-    public function get($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = null)
+    public function get($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = null)
     {
         return $this->scopeConfig->getValue($path, $scope, $scopeId);
     }
@@ -43,7 +43,7 @@ class AdminConfig
      * @param string $scope
      * @param int $scopeId
      */
-    public function set($path, $value = null, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)
+    public function set($path, $value = null, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         if (!is_array($path)) {
             return $this->configWriter->save($path, $value, $scope, $scopeId);
@@ -61,13 +61,13 @@ class AdminConfig
     }
 
     /**
-     * Exclude given config from core_config_data, thus restoting it to the default value set at its config.xml
+     * Exclude given config from core_config_data, thus restoring it to the default value set at its config.xml
      *
      * @param string|array $path
      * @param string $scope
      * @param int $scopeId
      */
-    public function restore($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)
+    public function restore($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         $paths = is_string($path) ? [$path] : $path;
         foreach ($paths as $path) {
@@ -76,7 +76,7 @@ class AdminConfig
     }
 
     /**
-     * Reset given config(s) to it's original config.xml value
+     * Reset given config(s) to its original config.xml value
      *
      * @deprecated 2.0.3 replaced with "restore" to match the admin settings naming
      * @see Discorgento\Migrations\Setup\Migration\Facade\AdminConfig::restore
@@ -86,7 +86,7 @@ class AdminConfig
      * @param int $scopeId
      * @return void
      */
-    public function reset($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)
+    public function reset($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         $this->restore($path, $scope, $scopeId);
     }
@@ -99,7 +99,7 @@ class AdminConfig
      * @param string $scope
      * @param int $scopeId
      */
-    public function append($path, $value, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = null)
+    public function append($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = null)
     {
         $oldValue = $this->scopeConfig->getValue($path, $scope, $scopeId);
         $newValue = $oldValue . $value;
@@ -119,7 +119,7 @@ class AdminConfig
         $path,
         $option,
         $separator = ',',
-        $scope = ScopeConfig::SCOPE_TYPE_DEFAULT,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeId = null
     ) {
         $oldValueRaw = $this->scopeConfig->getValue($path, $scope, $scopeId);

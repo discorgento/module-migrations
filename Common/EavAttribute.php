@@ -140,7 +140,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
     }
 
     /**
-     * Retrieve entity type if
+     * Retrieve entity type id
      *
      * @return int
      */

@@ -3,7 +3,7 @@
 
 namespace Discorgento\Migrations\Common;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 abstract class Cms
 {
@@ -68,7 +68,7 @@ abstract class Cms
     }
 
     /**
-     * Create a new content only if it not exists yet
+     * Create a new content only if it does not exist yet
      *
      * @param string $identifier
      * @param array $data
@@ -180,7 +180,7 @@ abstract class Cms
     }
 
     /**
-     * Check if given block exists
+     * Check if given CMS content exists
      *
      * @param string $identifier
      * @param int|null $storeId
@@ -190,7 +190,7 @@ abstract class Cms
     {
         try {
             $this->findId($identifier, $storeId);
-        } catch (\Throwable $th) {
+        } catch (NoSuchEntityException $e) {
             return false;
         }
 
@@ -210,12 +210,12 @@ abstract class Cms
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('identifier', $identifier);
 
-        if ($storeId) {
+        if ($storeId !== null) {
             $collection->addStoreFilter($storeId);
         }
 
         if (!$collection->count()) {
-            throw new LocalizedException(
+            throw new NoSuchEntityException(
                 __("CMS content with identifier '$identifier' not found")
             );
         }

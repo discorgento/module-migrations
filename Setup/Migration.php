@@ -3,6 +3,7 @@
 
 namespace Discorgento\Migrations\Setup;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -10,7 +11,7 @@ use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
 abstract class Migration implements DataPatchInterface, PatchRevertableInterface
 {
-    protected const AREA_CODE = null;
+    protected const AREA_CODE = Area::AREA_GLOBAL;
 
     /** @var Migration\Context */
     private $context;
@@ -28,26 +29,30 @@ abstract class Migration implements DataPatchInterface, PatchRevertableInterface
     abstract protected function execute();
 
     /**
-     * Undo/revert the migration (optional)
+     * [Optional] Insert your rollback logic here.
+     * It will be executed when you run `bin/magento setup:db-data:rollback` command.
      *
      * @return void
      */
+    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     protected function rollback()
     {
-        // optional, override to implement an undo feature in your migration
     }
 
     /**
      * @inheritDoc
      *
-     * No reason to use the raw apply() method, use execute() instead
+     * ⚠ Keep this method untouched in child patches.
+     * Put patch logic in execute() instead.
      */
+    // phpcs:ignore Magento2.PHP.FinalImplementation
     final public function apply()
     {
         if ($appliedAlias = $this->hasAlreadyAppliedAlias()) {
-            $this->context->logger->info(__(
-                'Patch data "%1" skipped because the it was already applied under the old name "%2"',
-                [static::class, $appliedAlias]
+            $this->context->logger->info(\sprintf(
+                'Patch data "%s" skipped because it was already applied under the old name "%s"',
+                static::class,
+                $appliedAlias
             ));
 
             return;
@@ -55,15 +60,10 @@ abstract class Migration implements DataPatchInterface, PatchRevertableInterface
 
         $this->getConnection()->startSetup();
 
-        if ($areaCode = static::AREA_CODE) {
-            try {
-                $this->context->state->setAreaCode($areaCode);
-            } catch (\Throwable $th) {
-                // already set
-            }
-        }
-
-        $this->execute();
+        $this->context->state->emulateAreaCode(
+            static::AREA_CODE,
+            [$this, 'execute']
+        );
 
         $this->getConnection()->endSetup();
     }
@@ -71,8 +71,10 @@ abstract class Migration implements DataPatchInterface, PatchRevertableInterface
     /**
      * @inheritDoc
      *
-     * No reason to use the raw revert() method, use rollback() instead
+     * ⚠ Keep this method untouched in child patches.
+     * Put revert logic in rollback() instead.
      */
+    // phpcs:ignore Magento2.PHP.FinalImplementation
     final public function revert()
     {
         $this->getConnection()->startSetup();

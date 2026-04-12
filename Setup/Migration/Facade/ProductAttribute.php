@@ -64,7 +64,7 @@ class ProductAttribute extends EavAttribute
     }
 
     /**
-     * Shorthand to quickly create a dropdown-type attribute if it not exists yet
+     * Shorthand to quickly create a dropdown-type attribute if it does not exist yet
      *
      * @param string $code
      * @param string $label
@@ -225,7 +225,7 @@ class ProductAttribute extends EavAttribute
             $groupId = $this->getConnection()->fetchOne($select);
 
             if (empty($groupId)) {
-                throw new NoSuchEntityException(__("Attribute Group with name $attributeSet not found"));
+                throw new NoSuchEntityException(__("Attribute Group with name $group not found"));
             }
 
             return (int) $groupId;
