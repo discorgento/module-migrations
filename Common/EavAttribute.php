@@ -40,7 +40,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *   When trying to create an attribute that already exists (or with invalid definition).
-     * @return \Magento\Eav\Setup\EavSetup
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     public function create($code, $data)
     {
@@ -49,6 +49,8 @@ abstract class EavAttribute implements ScopedAttributeInterface
             $code,
             $data
         );
+
+        return $this->config->getAttribute(static::ENTITY_TYPE, $code);
     }
 
     /**
@@ -56,15 +58,15 @@ abstract class EavAttribute implements ScopedAttributeInterface
      *
      * @param string $code
      * @param array $data
-     * @return void
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     public function createIfNotExists($code, $data)
     {
-        if ($this->getEavSetup()->getAttributeId(static::ENTITY_TYPE, $code)) {
-            return;
+        if ($this->exists($code)) {
+            return $this->config->getAttribute(static::ENTITY_TYPE, $code);
         }
 
-        $this->create($code, $data);
+        return $this->create($code, $data);
     }
 
     /**
@@ -72,7 +74,7 @@ abstract class EavAttribute implements ScopedAttributeInterface
      *
      * @param string $code
      * @param array $data
-     * @return \Magento\Eav\Setup\EavSetup
+     * @return void
      */
     public function update($code, $data)
     {
@@ -97,6 +99,32 @@ abstract class EavAttribute implements ScopedAttributeInterface
         }
 
         $this->update($code, $data);
+    }
+
+    /**
+     * Delete an existing attribute
+     *
+     * @param string $code
+     * @return void
+     */
+    public function delete($code)
+    {
+        $this->getEavSetup()->removeAttribute(static::ENTITY_TYPE, $code);
+    }
+
+    /**
+     * Delete an existing attribute only when it already exists
+     *
+     * @param string $code
+     * @return void
+     */
+    public function deleteIfExists($code)
+    {
+        if (!$this->exists($code)) {
+            return;
+        }
+
+        $this->delete($code);
     }
 
     /**

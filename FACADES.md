@@ -28,15 +28,29 @@ $username = $this->adminConfig->get('my/module/user');
 ```
 
 #### `set($path, $value = null, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)`
-Override an existing entry, or create a new one if needed:
+Override an existing entry, or create a new one if needed. You can also pass an array of paths, and each item may override `scope` and `scope_id`:
 ```php
 $this->adminConfig->set('payment/creditcard/identifier', 'My Store');
+
+$this->adminConfig->set([
+    'catalog/frontend/flat_catalog_category' => '1',
+    'web/secure/use_in_frontend' => [
+        'value' => '1',
+        'scope' => 'stores',
+        'scope_id' => 2,
+    ],
+]);
 ```
 
 #### `restore($path, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = 0)`
-Equivalent to checking the "restore" checkbox in admin. Force the setting to fallback to its default value defined in some `config.xml`:
+Equivalent to checking the "restore" checkbox in admin. Force the setting to fallback to its default value defined in some `config.xml`. This method accepts either a single path or an array of paths:
 ```php
 $this->adminConfig->restore('shipping/carrier/show_foo_in_checkout');
+
+$this->adminConfig->restore([
+    'web/secure/use_in_frontend',
+    'design/head/includes',
+]);
 ```
 
 #### `append($path, $value, $scope = ScopeConfig::SCOPE_TYPE_DEFAULT, $scopeId = null)`
@@ -71,7 +85,7 @@ public function __construct(
 }
 ```
 
-Both `CmsPage` and `CmsBlock` share the same methods below. Store-scoped methods accept `$storeId = null` to use the default/global scope.
+Both `CmsPage` and `CmsBlock` share the same methods below. Methods that read or write store assignments accept `$storeId = null` to use the default/global scope.
 
 #### `get($identifier, $storeId = null)`
 Load a page or block by its identifier:
@@ -91,7 +105,7 @@ $this->cmsPage->create('my-new-page', [
 ```
 
 #### `createIfNotExists($identifier, $data, $storeId = null)`
-Similar to `create()`, but will skip the content creation if it already exists instead of throwing an exception.
+Similar to `create()`, but if the content already exists it leaves it unchanged and returns that existing page or block instance.
 
 #### `update($identifier, $data, $storeId = null)`
 Update the content of the existing CMS content:
@@ -105,7 +119,7 @@ $this->cmsBlock->update('footer', [
 ```
 
 #### `updateIfExists($identifier, $data, $storeId = null)`
-Similar to `update()`, but will skip the data changes if the content does not exist instead of throwing an exception.
+Similar to `update()`, but only applies changes when the content already exists. Returns the updated page or block instance, or `null` when nothing matches.
 
 #### `createOrUpdate($identifier, $data, $storeId = null)`
 If content with the given identifier already exists, update it with the provided data. Otherwise, create it:
@@ -118,11 +132,14 @@ $this->cmsPage->createOrUpdate('my-page', [
 ]);
 ```
 
-#### `delete($identifier, $storeId = null)`
-Delete the content, optionally restricting the scope to a single store:
+#### `delete($identifier)`
+Delete the respective CMS entity:
 ```php
 $this->cmsBlock->delete('seasonal-offers');
 ```
+
+#### `deleteIfExists($identifier)`
+Similar to `delete()`, but skips deletion when the CMS entity already doesn't exists.
 
 #### `exists($identifier, $storeId = null)`
 Check if a page or block with the given identifier already exists on the database:
@@ -144,7 +161,7 @@ These methods are shared by `CategoryAttribute`, `CustomerAttribute`, and `Produ
 #### `create($code, $data)`
 Create a new EAV attribute:
 ```php
-$this->productAttribute->create('brand_badge', [
+$attribute = $this->productAttribute->create('brand_badge', [
     'label' => 'Brand Badge',
     'input' => 'text',
     'type' => 'varchar',
@@ -152,7 +169,7 @@ $this->productAttribute->create('brand_badge', [
 ```
 
 #### `createIfNotExists($code, $data)`
-Similar to `create()`, but skips creation when the attribute already exists.
+Similar to `create()`, but if the attribute already exists it leaves it unchanged and returns that existing attribute instance.
 
 #### `update($code, $data)`
 Update an existing attribute definition:
@@ -164,6 +181,12 @@ $this->productAttribute->update('brand_badge', [
 
 #### `updateIfExists($code, $data)`
 Similar to `update()`, but skips the update when the attribute does not exist.
+
+#### `delete($code)`
+Delete an existing attribute definition.
+
+#### `deleteIfExists($code)`
+Similar to `delete()`, but skips deletion when the attribute does not exist.
 
 #### `exists($code)`
 Check whether an attribute already exists:
@@ -231,11 +254,11 @@ public function __construct(
 #### `createDropdown($code, $label, $values, $config = [])`
 Create a new dropdown attribute:
 ```php
-$this->productAttribute->createDropdown('sizes', 'Clothes Size', ['P', 'M', 'G']);
+$attribute = $this->productAttribute->createDropdown('sizes', 'Clothes Size', ['P', 'M', 'G']);
 ```
 
 #### `createDropdownIfNotExists($code, $label, $values, $config = [])`
-Similar to `createDropdown()`, but skips creation when the attribute already exists.
+Similar to `createDropdown()`, but returns the existing attribute when it already exists.
 
 #### `assignToAttributeSet($attributeCode, $attributeSet = null, $group = null, $after = null)`
 Simulates the process of navigating to `Stores -> Attribute Set` and assigning an attribute there:
@@ -249,7 +272,7 @@ $this->productAttribute->assignToAttributeSet(
 ```
 
 #### `unassignFromAttributeSet($attributeCode, $attributeSetId = null)`
-Pretty much what the name implies:
+Remove an attribute from the given attribute set. When `$attributeSetId` is omitted, the default product attribute set is used:
 ```php
 $this->productAttribute->unassignFromAttributeSet(
     'size',

@@ -45,10 +45,11 @@ class ProductAttribute extends EavAttribute
      * @param string $label
      * @param array $values
      * @param array $config
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     public function createDropdown($code, $label, $values, $config = [])
     {
-        $this->create(
+        return $this->create(
             $code,
             array_merge([
                 'label' => $label,
@@ -70,10 +71,11 @@ class ProductAttribute extends EavAttribute
      * @param string $label
      * @param array $values
      * @param array $config
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     public function createDropdownIfNotExists($code, $label, $values, $config = [])
     {
-        $this->createIfNotExists(
+        return $this->createIfNotExists(
             $code,
             array_merge([
                 'label' => $label,

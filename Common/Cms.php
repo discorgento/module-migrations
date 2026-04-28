@@ -180,6 +180,22 @@ abstract class Cms
     }
 
     /**
+     * Delete cms content only if it already exists
+     *
+     * @param string $identifier
+     * @param int|null $storeId
+     * @return void
+     */
+    public function deleteIfExists($identifier, $storeId = null)
+    {
+        if (!$this->exists($identifier, $storeId)) {
+            return;
+        }
+
+        $this->delete($identifier, $storeId);
+    }
+
+    /**
      * Check if given CMS content exists
      *
      * @param string $identifier
