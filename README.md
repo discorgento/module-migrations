@@ -1,3 +1,6 @@
+> [!WARNING]
+> With the advent of Agentic Coding, this module goes from a very handy dev tool to a deployment overhead. Therefore, we're retiring it.
+
 # ![Discorgento Migrations](docs/header.png)
 
 <p align="center">A dev-friendly approach to keep track of database changes in Magento 2</p>
