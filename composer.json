@@ -1,6 +1,7 @@
 {
     "name": "discorgento/module-migrations",
     "description": "A dev-friendly approach to quickly create migrations (patch data) on Magento 2",
+    "abandoned" : true,
     "type": "magento2-module",
     "license": "MIT",
     "require": {
